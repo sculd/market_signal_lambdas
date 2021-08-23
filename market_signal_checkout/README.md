@@ -1,5 +1,5 @@
 # About
-This projects is a codebase for the aws lambda function to checkout the subscription payment.
+This projects is a codebase for the aws lambda function to return checkout session url for the subscription payment.
 
 # How to Update zip
 ```

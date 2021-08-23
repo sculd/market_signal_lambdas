@@ -1,5 +1,5 @@
 # About
-This projects is a codebase for the aws lambda function to checkout webhook for the subscription payment.
+This projects is a codebase for the aws lambda function to checkout webhook for the stripe events.
 
 # How to Update zip
 ```
