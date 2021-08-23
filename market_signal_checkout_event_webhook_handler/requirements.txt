@@ -1,0 +1,4 @@
+Authlib
+requests
+cffi
+stripe
