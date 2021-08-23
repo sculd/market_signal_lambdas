@@ -6,5 +6,5 @@ cd package
 zip -r ../my-deployment-package.zip .
 cd ..
 zip -g my-deployment-package.zip lambda_function.py
-aws s3 cp my-deployment-package.zip s3://market-signal-checkout-handler-lambda/
-aws lambda update-function-code --function-name MarketSignalCheckoutWebhookHandler --s3-bucket market-signal-checkout-handler-lambda --s3-key my-deployment-package.zip
+aws s3 cp my-deployment-package.zip s3://market-daily-stat-lambda/
+aws lambda update-function-code --function-name MarketDailyStat --s3-bucket market-daily-stat-lambda --s3-key my-deployment-package.zip

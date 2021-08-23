@@ -10,4 +10,5 @@ zip -g my-deployment-package.zip authorize.py
 zip -g my-deployment-package.zip get.py
 zip -g my-deployment-package.zip remove.py
 zip -g my-deployment-package.zip post.py
-aws s3 cp my-deployment-package.zip s3://market-signal-lambda/
+aws s3 cp my-deployment-package.zip s3://market-signal-alert-lambda/
+aws lambda update-function-code --function-name Alert --s3-bucket market-signal-alert-lambda --s3-key my-deployment-package.zip
