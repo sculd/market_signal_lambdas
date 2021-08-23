@@ -8,3 +8,4 @@ cd ..
 zip -g my-deployment-package.zip lambda_function.py
 zip -g my-deployment-package.zip authorize.py
 aws s3 cp my-deployment-package.zip s3://market-signal-checkout-lambda/
+aws lambda update-function-code --function-name MarketSignalCheckout --s3-bucket s3://market-signal-checkout-lambda/
