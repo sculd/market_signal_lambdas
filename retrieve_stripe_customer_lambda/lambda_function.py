@@ -26,6 +26,15 @@ _RESPONSE_400 = {
         }
     }
 
+_RESPONSE_403 = {
+        'statusCode': 403,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        }
+    }
+
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY') 
 
 
