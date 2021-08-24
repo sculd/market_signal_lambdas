@@ -124,7 +124,7 @@ def lambda_handler(event, context):
         return res
 
     query_string_parameters = event[_EVENT_KEY_QUERY_STRING_PARAMETER]
-    if _PARAM_KEY_EMAIL not in query_string_parameters:
+    if query_string_parameters is None or _PARAM_KEY_EMAIL not in query_string_parameters:
         res = _RESPONSE_400
         res['body'] = json.dumps('email query parameter is not found.')
         return res
