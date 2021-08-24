@@ -1,4 +1,4 @@
-import datetime, decimal, os
+    import datetime, decimal, os
 import json
 import authorize
 import stripe
@@ -12,6 +12,7 @@ _EVENT_KEY_PATH_PARAMETER = 'pathParameters'
 _EVENT_KEY_QUERY_STRING_PARAMETER = 'queryStringParameters'
 _EVENT_KEY_HTTP_METHOD = 'httpMethod'
 _CALLBACK_URL = 'callback_url'
+_STRIPE_CUSTOMER_ID = 'stripe_curtomer_id'
 _PARAM_KEY_PRICE_TYPE = 'price_type'
 _PRICE_TYPE_LIGHT = 'light'
 _PRICE_TYPE_PREMIUM = 'premium'
@@ -55,7 +56,10 @@ _RESPONSE_500 = {
     }
 
 
-def create_checkout_session(price_id, callback_url):
+def create_checkout_session(price_id, callback_url, customer_id):
+    if stripe_customer_id is None:
+        print('[create_checkout_session] customer_id is None')
+
     try:
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=[
@@ -68,6 +72,7 @@ def create_checkout_session(price_id, callback_url):
                 },
             ],
             mode='subscription',
+            customer=customer_id,
             success_url=callback_url + '?success=true',
             cancel_url=callback_url + '?canceled=true',
         )
@@ -116,7 +121,11 @@ def lambda_handler(event, context):
         print('returning 400 as the method callback url is not provided.')
         return _RESPONSE_400
 
-    redirect_url = create_checkout_session(price_id, callback_url)
+    stripe_customer_id = None
+    if query_string_parameters:
+        if _STRIPE_CUSTOMER_ID in query_string_parameters:
+            stripe_customer_id = query_string_parameters[_STRIPE_CUSTOMER_ID]
+    redirect_url = create_checkout_session(price_id, callback_url, stripe_customer_id)
     if not redirect_url:
         print('could not retrieve the redirect url.')
         return _RESPONSE_500
