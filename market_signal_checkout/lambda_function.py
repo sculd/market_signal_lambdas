@@ -1,4 +1,4 @@
-    import datetime, decimal, os
+import datetime, decimal, os
 import json
 import authorize
 import stripe
