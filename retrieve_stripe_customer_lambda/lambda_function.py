@@ -15,7 +15,6 @@ _RESOURCE_DYNAMODB = 'dynamodb'
 _TABLE_NAME = 'subscription'
 _DATABASE_KEY_AUTH0_USER_ID = 'auth0_user_id'
 _DATABASE_KEY_STRIPE_CUSTOMER_ID = 'stripe_customer_id'
-_DATABASE_KEY_IS_ACTIVE = 'is_active'
 
 _RESPONSE_400 = {
         'statusCode': 400,
@@ -72,7 +71,6 @@ def update_stripe_customer_item_for_auth0_user(auth0_user_id, stripe_customer_id
     item = {
       _DATABASE_KEY_AUTH0_USER_ID: auth0_user_id,
       _DATABASE_KEY_STRIPE_CUSTOMER_ID: stripe_customer_id,
-      _DATABASE_KEY_IS_ACTIVE: False
     }
     try:
         table.put_item(
