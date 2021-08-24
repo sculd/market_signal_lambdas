@@ -83,7 +83,6 @@ def update_stripe_customer_item_for_auth0_user(auth0_user_id, stripe_customer_id
 
 def retrieve_stripe_customer_subscription(stripe_customer_id):
   c = stripe.Customer.retrieve(stripe_customer_id)
-  print('c:', c)
   return c['subscriptions'] if 'subscriptions' in c else {}
 
 
