@@ -12,7 +12,7 @@ _EVENT_KEY_PATH_PARAMETER = 'pathParameters'
 _EVENT_KEY_QUERY_STRING_PARAMETER = 'queryStringParameters'
 _EVENT_KEY_HTTP_METHOD = 'httpMethod'
 _CALLBACK_URL = 'callback_url'
-_STRIPE_CUSTOMER_ID = 'stripe_curtomer_id'
+_CUSTOMER_ID = 'curtomer_id'
 _PARAM_KEY_PRICE_TYPE = 'price_type'
 _PRICE_TYPE_LIGHT = 'light'
 _PRICE_TYPE_PREMIUM = 'premium'
@@ -123,8 +123,8 @@ def lambda_handler(event, context):
 
     stripe_customer_id = None
     if query_string_parameters:
-        if _STRIPE_CUSTOMER_ID in query_string_parameters:
-            stripe_customer_id = query_string_parameters[_STRIPE_CUSTOMER_ID]
+        if _CUSTOMER_ID in query_string_parameters:
+            stripe_customer_id = query_string_parameters[_CUSTOMER_ID]
     redirect_url = create_checkout_session(price_id, callback_url, stripe_customer_id)
     if not redirect_url:
         print('could not retrieve the redirect url.')
