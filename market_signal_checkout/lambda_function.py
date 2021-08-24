@@ -59,8 +59,6 @@ _RESPONSE_500 = {
 def create_checkout_session(price_id, callback_url, stripe_customer_id):
     if stripe_customer_id is None:
         print('[create_checkout_session] stripe_customer_id is None')
-    if customer_email is None:
-        print('[create_checkout_session] customer_email is None')
 
     try:
         checkout_session = stripe.checkout.Session.create(
