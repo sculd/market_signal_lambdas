@@ -113,7 +113,7 @@ def lambda_handler(event, context):
         res['body'] = json.dumps('http method is not found.')
         return res
 
-    if event[_EVENT_KEY_HTTP_METHOD] != 'POST':
+    if event[_EVENT_KEY_HTTP_METHOD] != 'GET':
         res = _RESPONSE_400
         res['body'] = json.dumps('wrong http method.')
         return res
