@@ -132,7 +132,7 @@ def lambda_handler(event, context):
 
     email = None
     if query_string_parameters:
-        if __EMAIL in query_string_parameters:
+        if _EMAIL in query_string_parameters:
             email = query_string_parameters[_EMAIL]
 
     redirect_url = create_checkout_session(price_id, callback_url, stripe_customer_id, email)
