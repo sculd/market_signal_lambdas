@@ -56,9 +56,9 @@ _RESPONSE_500 = {
     }
 
 
-def create_checkout_session(price_id, callback_url, customer_id):
+def create_checkout_session(price_id, callback_url, stripe_customer_id):
     if stripe_customer_id is None:
-        print('[create_checkout_session] customer_id is None')
+        print('[create_checkout_session] stripe_customer_id is None')
 
     try:
         checkout_session = stripe.checkout.Session.create(
@@ -72,7 +72,7 @@ def create_checkout_session(price_id, callback_url, customer_id):
                 },
             ],
             mode='subscription',
-            customer=customer_id,
+            customer=stripe_customer_id,
             success_url=callback_url + '?success=true',
             cancel_url=callback_url + '?canceled=true',
         )
