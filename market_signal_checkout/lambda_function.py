@@ -12,7 +12,6 @@ _EVENT_KEY_PATH_PARAMETER = 'pathParameters'
 _EVENT_KEY_QUERY_STRING_PARAMETER = 'queryStringParameters'
 _EVENT_KEY_HTTP_METHOD = 'httpMethod'
 _CALLBACK_URL = 'callback_url'
-_CUSTOMER_ID = 'customer_id'
 _EMAIL = 'email'
 _PARAM_KEY_PRICE_TYPE = 'price_type'
 _PRICE_TYPE_LIGHT = 'light'
@@ -57,7 +56,7 @@ _RESPONSE_500 = {
     }
 
 
-def create_checkout_session(price_id, callback_url, stripe_customer_id, customer_email):
+def create_checkout_session(price_id, callback_url, stripe_customer_id):
     if stripe_customer_id is None:
         print('[create_checkout_session] stripe_customer_id is None')
     if customer_email is None:
@@ -76,7 +75,6 @@ def create_checkout_session(price_id, callback_url, stripe_customer_id, customer
             ],
             mode='subscription',
             customer=stripe_customer_id,
-            customer_email=customer_email,
             success_url=callback_url + '?success=true',
             cancel_url=callback_url + '?canceled=true',
         )
@@ -130,12 +128,7 @@ def lambda_handler(event, context):
         if _CUSTOMER_ID in query_string_parameters:
             stripe_customer_id = query_string_parameters[_CUSTOMER_ID]
 
-    email = None
-    if query_string_parameters:
-        if _EMAIL in query_string_parameters:
-            email = query_string_parameters[_EMAIL]
-
-    redirect_url = create_checkout_session(price_id, callback_url, stripe_customer_id, email)
+    redirect_url = create_checkout_session(price_id, callback_url, stripe_customer_id)
     if not redirect_url:
         print('could not retrieve the redirect url.')
         return _RESPONSE_500
