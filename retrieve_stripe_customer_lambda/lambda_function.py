@@ -138,7 +138,7 @@ def lambda_handler(event, context):
     stripe_customer_item = get_stripe_customer_item_for_auth0_user(user_id)
     print('stripe_customer_item:', stripe_customer_item)
     r_body = stripe_customer_item
-    r_body['subscriptions'] = retrieve_stripe_customer_subscription(stripe_customer_item['id'])
+    r_body['subscriptions'] = retrieve_stripe_customer_subscription(stripe_customer_item['stripe_customer_id'])
 
     return {
         'statusCode': 200,
