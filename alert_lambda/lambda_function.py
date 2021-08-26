@@ -106,8 +106,10 @@ def lambda_handler(event, context):
             time_window_minutes = body['time_window_minutes'],
             threshold_percent = body['threshold_percent'],
             move_type = body['move_type'],
-            notification_destination_type = body['notification_destination_type'],
-            notification_destination = body['notification_destination'],
+            notification_to_email = body['notification_to_email'], 
+            notification_email = body['notification_email'], 
+            notification_to_sms = body['notification_to_sms'], 
+            notification_sms = body['notification_sms'], 
             alert_id = alert_id
             )
 

@@ -26,8 +26,6 @@ class PostAlertParameter:
         time_window_minutes, 
         threshold_percent, 
         move_type, 
-        notification_destination_type, 
-        notification_destination, 
         notification_to_email, 
         notification_email, 
         notification_to_sms, 
@@ -40,9 +38,6 @@ class PostAlertParameter:
         self.time_window_minutes = time_window_minutes
         self.threshold_percent = threshold_percent
         self.move_type = move_type
-
-        self.notification_destination_type = notification_destination_type
-        self.notification_destination = notification_destination
 
         self.notification_to_email = notification_to_email 
         self.notification_email = notification_email
