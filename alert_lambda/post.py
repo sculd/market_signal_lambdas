@@ -12,7 +12,6 @@ _TABLE = _DYNAMO_DB.Table(_TABLE_NAME)
 _ALLOWED_WINDOWS = set(['10', '20', '60', '360'])
 _ALLOWED_THRESHOLD = set(['5', '10', '20', '30'])
 _ALLOWED_MOVE_TYPE = set(['jump', 'drop'])
-_ALLOWED_NOTIFICATION_DESTINATION_TYPE = set(['email', 'sms'])
 
 _EMAIL_REGEX = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
@@ -29,6 +28,10 @@ class PostAlertParameter:
         move_type, 
         notification_destination_type, 
         notification_destination, 
+        notification_to_email, 
+        notification_email, 
+        notification_to_sms, 
+        notification_sms, 
         alert_id = None):
         self.user_id = user_id
         self.alert_name = alert_name
@@ -37,14 +40,24 @@ class PostAlertParameter:
         self.time_window_minutes = time_window_minutes
         self.threshold_percent = threshold_percent
         self.move_type = move_type
+
         self.notification_destination_type = notification_destination_type
         self.notification_destination = notification_destination
+
+        self.notification_to_email = notification_to_email 
+        self.notification_email = notification_email
+        self.notification_to_sms = notification_to_sms
+        self.notification_sms = notification_sms
+
         self.alert_id = alert_id
 
     def _validate_email(self, email):
         if not email:
             return True
         return re.fullmatch(_EMAIL_REGEX, email)
+
+    def _validate_sms(self, sms):
+        return True
 
     def validate(self):
         if not self.alert_name:
@@ -57,10 +70,10 @@ class PostAlertParameter:
             return False, "Threshold {th} is not allowed.".format(th=self.threshold_percent)
         if not self.move_type or self.move_type not in _ALLOWED_MOVE_TYPE:
             return False, "Move type {m} is not allowed.".format(th=self.move_type)
-        if not self.notification_destination_type or self.notification_destination_type not in _ALLOWED_NOTIFICATION_DESTINATION_TYPE:
-            return False, "Destination type {d} is not allowed.".format(d=self.notification_destination_type)
-        if self.notification_destination_type == 'email' and not self._validate_email(self.notification_destination):
-            return False, ""
+        if self.notification_to_email and not self._validate_email(self.notification_email):
+            return False, "Invalid email {d}".format(d=self.notification_email)
+        if self.notification_to_sms and not self._validate_sms(self.notification_sms):
+            return False, "Invalid SMS destination {d}".format(d=self.notification_sms)
         return True, None
 
 
@@ -78,8 +91,10 @@ def post_alert(parameter):
            'window_size_minutes': str(parameter.time_window_minutes),
            'threshold_percent': str(parameter.threshold_percent),
            'move_type': parameter.move_type,
-           'notification_destination_type': parameter.notification_destination_type,
-           'notification_destination': parameter.notification_destination,
+           'notification_to_email': parameter.notification_to_email,
+           'notification_email': parameter.notification_email,
+           'notification_to_sms': parameter.notification_to_sms,
+           'notification_sms': parameter.notification_sms,
            'alert_id': alert_id
         }
     print(item)
