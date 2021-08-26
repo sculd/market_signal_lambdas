@@ -91,7 +91,8 @@ def lambda_handler(event, context):
         body = json.loads(body)
         print('json body:', body)
 
-        keys = ['alert_name', 'description', 'symbols', 'time_window_minutes', 'threshold_percent', 'move_type', 'notification_destination_type', 'notification_destination']
+        keys = ['alert_name', 'description', 'symbols', 'time_window_minutes', 'threshold_percent', 'move_type', 
+                'notification_to_email', 'notification_email', 'notification_to_sms', 'notification_sms']
         for key in keys:
             if key not in body:
                 res = _RESPONSE_404
