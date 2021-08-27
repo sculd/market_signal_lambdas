@@ -50,10 +50,12 @@ class PostAlertParameter:
 
     def _validate_email(self, email):
         if not email:
-            return True
+            return False
         return re.fullmatch(_EMAIL_REGEX, email)
 
     def _validate_sms(self, sms):
+        if not sms:
+            return False
         return True
 
     def validate(self):
