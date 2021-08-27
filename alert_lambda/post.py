@@ -85,6 +85,7 @@ def post_alert(parameter):
            'alert_name': parameter.alert_name,
            'description': parameter.description,
            'symbol': parameter.symbols,
+           'is_all_symbols': parameter.is_all_symbols,
            'window_size_minutes': str(parameter.time_window_minutes),
            'threshold_percent': str(parameter.threshold_percent),
            'move_type': parameter.move_type,
