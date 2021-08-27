@@ -35,7 +35,7 @@ class PostAlertParameter:
         self.user_id = user_id
         self.alert_name = alert_name
         self.description = description
-        self.symbols = symbols
+        self.symbols = '*' if is_all_symbols else symbols 
         self.is_all_symbols = is_all_symbols
         self.time_window_minutes = time_window_minutes
         self.threshold_percent = threshold_percent
