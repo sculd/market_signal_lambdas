@@ -61,7 +61,7 @@ class PostAlertParameter:
     def validate(self):
         if not self.alert_name:
             return False, "Alert name can not be empty."
-        if not self.symbols:
+        if not self.is_all_symbols and not self.symbols:
             return False, "Symbol can not be empty."
         if not self.time_window_minutes or self.time_window_minutes not in _ALLOWED_WINDOWS:
             return False, "Window {w} is not allowed.".format(w=self.time_window_minutes)
