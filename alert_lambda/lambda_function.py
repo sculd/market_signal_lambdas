@@ -104,6 +104,7 @@ def lambda_handler(event, context):
             alert_name = body['alert_name'],
             description = body['description'],
             symbols = body['symbols'],
+            is_all_symbols = body['is_all_symbols'],
             time_window_minutes = body['time_window_minutes'],
             threshold_percent = body['threshold_percent'],
             move_type = body['move_type'],
