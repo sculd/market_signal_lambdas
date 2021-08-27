@@ -73,7 +73,7 @@ class PostAlertParameter:
             return False, "Empty email."
         if self.notification_to_email and not self._validate_email(self.notification_email):
             return False, "Invalid email {d}".format(d=self.notification_email)
-        if self.notification_to_sms and self.notification_sms:
+        if self.notification_to_sms and not self.notification_sms:
             return False, "Empty SMS destination."
         if self.notification_to_sms and not self._validate_sms(self.notification_sms):
             return False, "Invalid SMS destination {d}".format(d=self.notification_sms)
