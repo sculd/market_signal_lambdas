@@ -5,6 +5,8 @@ from boto3.dynamodb.conditions import Key, Attr
 import pytz
 import report_email, report_sms
 
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY') 
+
 _TIMEZONE_US_EAST = pytz.timezone('US/EASTERN')
 
 _RESOURCE_DYNAMODB = 'dynamodb'
