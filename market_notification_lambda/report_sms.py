@@ -40,6 +40,7 @@ def send_sms_report(
     max_jump_percent, price_at_max_jump, max_jump_epoch_seconds,
     window_minutes, threshold_percent, move_type
     ):
+     print('send_sms_report for {s}'.format(s=symbol))
      sms_str = get_report_str(
         symbol, 
         current_price, timestamp_epoch_seconds,

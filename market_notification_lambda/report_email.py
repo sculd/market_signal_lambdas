@@ -43,6 +43,7 @@ def send_email_report(
     max_jump_percent, price_at_max_jump, max_jump_epoch_seconds,
     window_minutes, threshold_percent, move_type
     ):
+    print('send_email_report for {s}'.format(s=symbol))
     html_str = get_report_html(
         symbol, 
         current_price, timestamp_epoch_seconds,
