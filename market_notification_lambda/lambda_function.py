@@ -191,6 +191,9 @@ def lambda_handler(event, context):
     items_matching_symbol = _get_alert_items(symbol, str(window_minutes), str(threshold_percent), move_type)
     items_any_symbol = _get_alert_any_symbol_items(str(window_minutes), str(threshold_percent), move_type)
 
+    for i in items_matching_symbol: print('items_matching_symbol {i}'.format(i=i))
+    for i in items_any_symbol: print('items_any_symbol {i}'.format(i=i))
+
     items = items_matching_symbol + items_any_symbol
     paid_items = _filter_out_basic_tier_db_items(items)
     emails = collect_emails(items)
