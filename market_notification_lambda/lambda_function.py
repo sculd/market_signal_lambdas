@@ -57,6 +57,7 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 def _get_alert_items(symbol, window_minutes, threshold_percent, move_type):
+    move_type = move_type.lower()
     dynamodb = boto3.resource(_RESOURCE_DYNAMODB)
     table = dynamodb.Table(_TABLE_NAME_ALERTS)
 
@@ -71,7 +72,7 @@ def _get_alert_items(symbol, window_minutes, threshold_percent, move_type):
 
 
 def _get_alert_any_symbol_items(window_minutes, threshold_percent, move_type):
-    print('_get_alert_any_symbol_items, window_minutes: {w}, threshold_percent: {th}, move_type: {m}'.format(w=window_minutes,th=threshold_percent,m=move_type))
+    move_type = move_type.lower()
     dynamodb = boto3.resource(_RESOURCE_DYNAMODB)
     table = dynamodb.Table(_TABLE_NAME_ALERTS)
 
