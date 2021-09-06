@@ -1,5 +1,5 @@
 import datetime, decimal, stripe, os
-import json
+import json, re
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import pytz
@@ -8,6 +8,7 @@ import report_email, report_sms
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY') 
 
 _TIMEZONE_US_EAST = pytz.timezone('US/EASTERN')
+_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
 
 _RESOURCE_DYNAMODB = 'dynamodb'
 _TABLE_NAME_ALERTS = 'alerts'
@@ -151,6 +152,9 @@ def collect_smses(items):
     smses = [i['notification_sms'] for i in items if i['notification_to_sms']]
     return list(set(smses))
 
+def _format_sms_destination(normalized_sms_destination):
+    # (123) 123-1234 to +11231231234
+    return '+1' + ''.join(re.split('[ -]', normalized_sms_destination.replace('(', '').replace(')', '')))
 
 def lambda_handler(event, context):
     print("event:", event)
@@ -199,8 +203,6 @@ def lambda_handler(event, context):
 
     print('items_matching_symbol len: {l}'.format(l=len(items_matching_symbol)))
     print('items_any_symbol len: {l}'.format(l=len(items_any_symbol)))
-    for i in items_matching_symbol: print('items_matching_symbol {i}'.format(i=i))
-    for i in items_any_symbol: print('items_any_symbol {i}'.format(i=i))
 
     items = items_matching_symbol + items_any_symbol
     paid_items = _filter_out_basic_tier_db_items(items)
@@ -218,7 +220,7 @@ def lambda_handler(event, context):
 
     for sms in smses:
         report_sms.send_sms_report(
-            sms,
+            _format_sms_destination(sms),
             symbol, 
             current_price, int(epoch),
             min_drop_percent, price_at_min_drop, int(epoch_at_min_drop),
