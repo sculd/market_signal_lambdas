@@ -203,6 +203,7 @@ def lambda_handler(event, context):
 
     print('items_matching_symbol len: {l}'.format(l=len(items_matching_symbol)))
     print('items_any_symbol len: {l}'.format(l=len(items_any_symbol)))
+    for i in items_any_symbol: print(i)
 
     items = items_matching_symbol + items_any_symbol
     paid_items = _filter_out_basic_tier_db_items(items)
