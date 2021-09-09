@@ -25,11 +25,11 @@ def get_report_lines(
         return custom_strftime('%h {S} %I:%M %p ET', t)
 
 
-    drop_str = 'At {time_drop} dropped by {min_drop_percent}% to ${price_at_min_drop} within ${w} minutes'.format(
+    drop_str = 'At {time_drop} dropped by {min_drop_percent}% to ${price_at_min_drop} within {w} minutes'.format(
         time_drop=get_time_str_from_epoch(min_drop_epoch_seconds), min_drop_percent=round(float(min_drop_percent)), price_at_min_drop=price_at_min_drop, w=window_minutes
         ) if abs(float(min_drop_percent)) >= threshold_percent_v else ''
 
-    jump_str = 'At {time_jump} jumped by {max_jump_percent}% to ${price_at_max_jump} within ${w} minutes'.format(
+    jump_str = 'At {time_jump} jumped by {max_jump_percent}% to ${price_at_max_jump} within {w} minutes'.format(
         time_jump=get_time_str_from_epoch(max_jump_epoch_seconds), max_jump_percent=round(float(max_jump_percent)), price_at_max_jump=price_at_max_jump, w=window_minutes
         ) if abs(float(max_jump_percent)) >= threshold_percent_v else ''
 
