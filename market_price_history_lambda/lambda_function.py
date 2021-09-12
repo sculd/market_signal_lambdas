@@ -20,8 +20,6 @@ _PATH_PARAMETER_SYMBOL = 'symbol'
 
 _EVENT_KEY_QUERY_STRING_PARAMETER = 'queryStringParameters'
 _PARAM_KEY_FROM = 'from'
-_PARAM_KEY_MARKET = 'market'
-_PARAM_KEY_SYMBOL = 'symbol'
 
 _RESPONSE_400 = {
         'statusCode': 400,
@@ -67,6 +65,7 @@ def _get_equity_minutely_ohlcv(symbol, from_epoch_seconds):
     print('_get_equity_minutely_ohlcv', 'date_str', date_str)
     candles_polygon = get_polygon_client().stocks_equities_aggregates(symbol, 1, "minute", date_str, date_str, unadjusted=False)
     r = [{'o': p['o'], 'h': p['h'], 'l': p['l'], 'c': p['c'], 'v': p['v'], 't': p['t'] // 1000} for p in candles_polygon.results]
+    print(r)
     return r
 
 def _get_binance_minutely_ohlcv(symbol, from_epoch_seconds):
