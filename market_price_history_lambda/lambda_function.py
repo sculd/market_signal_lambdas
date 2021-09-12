@@ -97,7 +97,7 @@ def lambda_handler(event, context):
     symbol = query_string_parameters[_PARAM_KEY_SYMBOL]
     from_t = datetime.datetime.strptime(query_string_parameters[_PARAM_KEY_FROM], _DATETIME_FORMAT)
     from_epoch_seconds = int(from_t.timestamp())
-    print("from_t:", from_t)
+    print("from_epoch_seconds", from_epoch_seconds, "from_t:", from_t)
 
     items = []
     if market == 'symbol':
