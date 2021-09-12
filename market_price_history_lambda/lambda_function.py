@@ -14,6 +14,10 @@ _API_KEY_POLYGON = os.getenv('API_KEY_POLYGON')
 _binance_client = None
 _polygon_client = None
 
+_EVENT_KEY_PATH_PARAMETER = 'pathParameters'
+_PATH_PARAMETER_MARKET = 'market'
+_PATH_PARAMETER_SYMBOL = 'symbol'
+
 _EVENT_KEY_QUERY_STRING_PARAMETER = 'queryStringParameters'
 _PARAM_KEY_FROM = 'from'
 _PARAM_KEY_MARKET = 'market'
@@ -72,31 +76,27 @@ def _get_binance_minutely_ohlcv(symbol, from_epoch_seconds):
 
 
 def lambda_handler(event, context):
-    query_string_parameters = event[_EVENT_KEY_QUERY_STRING_PARAMETER]
-    print("query_string_parameters:", query_string_parameters)
+    path_parameters = event[_EVENT_KEY_PATH_PARAMETER]
 
-    if not query_string_parameters:
+    if _PATH_PARAMETER_MARKET not in path_parameters:
         res = _RESPONSE_400
-        res['body'] = json.dumps('query_string_parameters is empty.')
+        res['body'] = json.dumps('market is not specified.')
         return res
+
+    if _PATH_PARAMETER_SYMBOL not in path_parameters:
+        res = _RESPONSE_400
+        res['body'] = json.dumps('symbol is not specified.')
+        return res
+    market = path_parameters[_PATH_PARAMETER_MARKET]
+    symbol = path_parameters[_PATH_PARAMETER_SYMBOL]
     
-    if _PARAM_KEY_MARKET not in query_string_parameters:
-        res = _RESPONSE_400
-        res['body'] = json.dumps('{k} is not found.'.format(k=_PARAM_KEY_MARKET))
-        return res
-
-    if _PARAM_KEY_SYMBOL not in query_string_parameters:
-        res = _RESPONSE_400
-        res['body'] = json.dumps('{k} is not found.'.format(k=_PARAM_KEY_SYMBOL))
-        return res
+    query_string_parameters = event[_EVENT_KEY_QUERY_STRING_PARAMETER]
 
     if _PARAM_KEY_FROM not in query_string_parameters:
         res = _RESPONSE_400
         res['body'] = json.dumps('{k} is not found.'.format(k=_PARAM_KEY_FROM))
         return res
     
-    market = query_string_parameters[_PARAM_KEY_MARKET]
-    symbol = query_string_parameters[_PARAM_KEY_SYMBOL]
     from_t = datetime.datetime.strptime(query_string_parameters[_PARAM_KEY_FROM], _DATETIME_FORMAT)
     from_epoch_seconds = int(from_t.timestamp())
     print("from_epoch_seconds", from_epoch_seconds, "from_t:", from_t)
