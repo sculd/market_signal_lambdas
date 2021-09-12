@@ -1,0 +1,4 @@
+requests
+pytz
+polygon-api-client
+python-binance
