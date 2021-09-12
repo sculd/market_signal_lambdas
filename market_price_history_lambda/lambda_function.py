@@ -55,10 +55,14 @@ def get_polygon_client():
 
 
 def _get_equity_minutely_ohlcv(symbol, from_epoch_seconds):
-    def epoch_seconds_to_et_str(timestamp_seconds):
+    def epoch_seconds_to_et(timestamp_seconds):
         t = datetime.datetime.utcfromtimestamp(timestamp_seconds)
         t_utc = pytz.utc.localize(t)
         t_tz = t_utc.astimezone(_TIMEZONE_US_EAST)
+        return t_tz
+
+    def epoch_seconds_to_et_str(timestamp_seconds):
+        t_tz = epoch_seconds_to_et(timestamp_seconds)
         return t_tz.strftime('%Y-%m-%d')
 
     date_str = epoch_seconds_to_et_str(from_epoch_seconds)
@@ -66,6 +70,7 @@ def _get_equity_minutely_ohlcv(symbol, from_epoch_seconds):
     candles_polygon = get_polygon_client().stocks_equities_aggregates(symbol, 1, "minute", date_str, date_str, unadjusted=False)
     r = [{'o': p['o'], 'h': p['h'], 'l': p['l'], 'c': p['c'], 'v': p['v'], 't': p['t'] // 1000} for p in candles_polygon.results]
     r = [p for p in r if p['t'] >= from_epoch_seconds]
+    r = [p for p in r if epoch_seconds_to_et(p['t']).hour < 16] # market close at 4pm et.
     return r
 
 def _get_binance_minutely_ohlcv(symbol, from_epoch_seconds):
