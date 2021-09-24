@@ -50,7 +50,6 @@ def dict_to_response(blob):
 
         if k == _DATABASE_KEY_DATE_ET:
             key = _RESPONSE_KEY_DATE
-            val = _TIMEZONE_EASTERN.localize(datetime.datetime.fromtimestamp(int(v)))
         ret[key] = val
 
         if k == _DATABASE_KEY_TIMESTAMP:
