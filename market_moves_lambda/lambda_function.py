@@ -163,6 +163,8 @@ def lambda_handler(event, context):
             t = datetime.datetime.strptime(query_string_parameters[_PARAM_KEY_TO], _DATETIME_FORMAT)
             to_epoch = int(t.timestamp())
 
+    if market == 'stock':
+        market = 'polygon' # stock is ingested from polygon
     print("market:", market)
 
     from_t = datetime.datetime.now() - datetime.timedelta(hours=24)
