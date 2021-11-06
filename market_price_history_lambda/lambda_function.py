@@ -106,7 +106,7 @@ def lambda_handler(event, context):
     print("from_epoch_seconds", from_epoch_seconds, "from_t:", from_t)
 
     items = []
-    if market == 'stock':
+    if market == 'stock' or market == 'polygon':
         items = _get_equity_minutely_ohlcv(symbol, from_epoch_seconds)
     elif market == 'binance':
         items = _get_binance_minutely_ohlcv(symbol, from_epoch_seconds)
