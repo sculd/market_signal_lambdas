@@ -54,8 +54,10 @@ def dict_to_response(blob):
 
         if k == _DATABASE_KEY_TIMESTAMP:
             key = _RESPONSE_KEY_DATETIME
-            val = _TIMEZONE_EASTERN.localize(datetime.datetime.fromtimestamp(int(v)))
-            ret[key] = val
+            utc_dt = datetime.datetime.utcfromtimestamp(int(v))
+            aware_utc_dt = utc_dt.replace(tzinfo=pytz.utc)
+            dt = aware_utc_dt.astimezone(_TIMEZONE_EASTERN)
+            ret[key] = dt.strftime('%Y-%m-%dT%H:%M:%S%z')
     return ret
 
 
