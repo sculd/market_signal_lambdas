@@ -1,4 +1,4 @@
-import datetime, decimal, json
+import datetime, decimal, json, requests
 import os
 import pytz
 from binance.client import Client as BinanceClient
