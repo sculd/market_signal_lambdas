@@ -78,6 +78,25 @@ def _get_binance_minutely_ohlcv(symbol, from_epoch_seconds):
     r = [{'o': float(p[1]), 'h': float(p[2]), 'l': float(p[3]), 'c': float(p[4]), 'v': float(p[5]), 't': p[0] // 1000} for p in candles_binance]
     return r
 
+def _get_okcoin_minutely_ohlcv(symbol, from_epoch_seconds):
+    start = datetime.datetime.fromtimestamp(from_epoch_seconds, tz=datetime.timezone.utc).strftime(_DATETIME_FORMAT_QUERY)
+    now = datetime.datetime.now(tz=datetime.timezone.utc)
+    end = now.strftime(_DATETIME_FORMAT_QUERY)
+
+    url = _BASE_URL + '/spot/v3/instruments/{pair}/candles?granularity=60&start={start}&end={end}'.format(
+        pair=symbol, start=start, end=end
+    )
+    print(url)
+    r = requests.get(url)
+    if not r.ok:
+        return []
+
+    js = r.json()
+    ret = []
+    for blob in js[::-1]:
+        t = datetime.datetime.strptime(blob[0], _DATETIME_FORMAT_CANDLE_HISTORY)
+        ret.append({'t': int(t.timestamp()), 'o': float(blob[1]), 'h': float(blob[2]), 'l': float(blob[3]), 'c': float(blob[4]), 'v': float(blob[5])})
+    return ret
 
 def lambda_handler(event, context):
     path_parameters = event[_EVENT_KEY_PATH_PARAMETER]
@@ -110,6 +129,8 @@ def lambda_handler(event, context):
         items = _get_equity_minutely_ohlcv(symbol, from_epoch_seconds)
     elif market == 'binance':
         items = _get_binance_minutely_ohlcv(symbol, from_epoch_seconds)
+    elif market == 'okcoin':
+        items = _get_okcoin_minutely_ohlcv(symbol, from_epoch_seconds)
 
     result = items
     return {
