@@ -10,6 +10,9 @@ _DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S%z'
 _API_KEY = os.getenv('API_KEY_BINANCE')
 _API_SECRET = os.getenv('API_SECRET_BINANCE')
 _API_KEY_POLYGON = os.getenv('API_KEY_POLYGON')
+_OKCOIN_BASE_URL = 'https://www.okcoin.com/api'
+_DATETIME_FORMAT_QUERY = '%Y-%m-%dT%H:%M:%S.000Z'
+_DATETIME_FORMAT_CANDLE_HISTORY = '%Y-%m-%dT%H:%M:%S.000%z'
 
 _binance_client = None
 _polygon_client = None
@@ -83,7 +86,7 @@ def _get_okcoin_minutely_ohlcv(symbol, from_epoch_seconds):
     now = datetime.datetime.now(tz=datetime.timezone.utc)
     end = now.strftime(_DATETIME_FORMAT_QUERY)
 
-    url = _BASE_URL + '/spot/v3/instruments/{pair}/candles?granularity=60&start={start}&end={end}'.format(
+    url = _OKCOIN_BASE_URL + '/spot/v3/instruments/{pair}/candles?granularity=60&start={start}&end={end}'.format(
         pair=symbol, start=start, end=end
     )
     print(url)
