@@ -5,8 +5,8 @@ def get_task_arns(ecs_client, group_name):
   tasks = ecs_client.list_tasks(cluster='market-signal')
   return [task_arn for task_arn in tasks['taskArns'] if group_name in ecs_client.describe_tasks(tasks = [task_arn], cluster='market-signal')['tasks'][0]['group']]
 
-def start_task(group_name, container_name, task_definition):
-  envvars = json.load(open('k8s/secrets/envvar.json'))
+def start_task(group_name, container_name, task_definition, command):
+  envfile = open('k8s/secrets/envvar.env')
 
   client = boto3.client('ecs')
 
@@ -39,7 +39,8 @@ def start_task(group_name, container_name, task_definition):
       'containerOverrides': [
           {
               'name': container_name,
-              'environment': [{'name': k, 'value': v} for k, v in envvars.items()]
+              'command': command,
+              'environment': [{'name': line.split('=')[0], 'value': line.split('=')[1]} for line in envfile]
           },
       ]
     }
@@ -50,5 +51,7 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps(start_task('market_realtime_move_report_kinesis', 'market_realtime_move_report_kinesis', 'market_realtime_move_report_kinesis:2'))
+        'body': json.dumps(start_task('market_realtime_move_report_kinesis', 'market_realtime_move_report_kinesis', 'market_realtime_move_report_kinesis:2',
+          ['java', '-jar', 'market_realtime_move_report_kinesis-1.0-SNAPSHOT.jar', '--shardid=0', '--envvars=k8s/secrets/envvars.env', '--apptype=changes_anomaly_stream']))
     }
+
