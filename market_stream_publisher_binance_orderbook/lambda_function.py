@@ -3,7 +3,7 @@ import boto3
 
 def get_task_arns(ecs_client, group_name):
   tasks = ecs_client.list_tasks(cluster='market-signal')
-  return [task_arn for task_arn in tasks['taskArns'] if group_name in ecs_client.describe_tasks(tasks = [task_arn], cluster='market-signal')['tasks'][0]['group']]
+  return [task_arn for task_arn in tasks['taskArns'] if ecs_client.describe_tasks(tasks = [task_arn], cluster='market-signal')['tasks'][0]['group'] == group_name]
 
 def start_task(group_name, container_name, task_definition, command):
   envvars = json.load(open('k8s/secrets/config.json'))
@@ -51,7 +51,6 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps(start_task('market_realtime_move_report_kinesis', 'market_realtime_move_report_kinesis', 'market_realtime_move_report_kinesis:2',
-          ['java', '-jar', 'market_realtime_move_report_kinesis-1.0-SNAPSHOT.jar', '--shardid=0', '--apptype=changes_anomaly_stream']))
+        'body': json.dumps(start_task('market_stream_publisher_binance_orderbook', 'market_stream_publisher_binance_orderbook', 'market_stream_publisher_binance_orderbook:2', 
+          ['python', 'run.py', 'binance_orderbook']))
     }
-
