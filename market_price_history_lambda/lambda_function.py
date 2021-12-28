@@ -11,6 +11,8 @@ _API_KEY = os.getenv('API_KEY_BINANCE')
 _API_SECRET = os.getenv('API_SECRET_BINANCE')
 _API_KEY_POLYGON = os.getenv('API_KEY_POLYGON')
 _OKCOIN_BASE_URL = 'https://www.okcoin.com/api'
+_KRAKEN_BASE_URL = 'https://api.kraken.com/0/public'
+
 _DATETIME_FORMAT_QUERY = '%Y-%m-%dT%H:%M:%S.000Z'
 _DATETIME_FORMAT_CANDLE_HISTORY = '%Y-%m-%dT%H:%M:%S.000%z'
 
@@ -101,6 +103,33 @@ def _get_okcoin_minutely_ohlcv(symbol, from_epoch_seconds):
         ret.append({'t': int(t.timestamp()), 'o': float(blob[1]), 'h': float(blob[2]), 'l': float(blob[3]), 'c': float(blob[4]), 'v': float(blob[5])})
     return ret
 
+def _get_kraken_minutely_ohlcv(symbol, from_epoch_seconds):
+    url = _KRAKEN_BASE_URL + '/OHLC?pair={pair}&since={since}'.format(
+        pair=symbol, since=from_epoch_seconds
+    )
+    print(url)
+    r = requests.get(url)
+    if not r.ok:
+        return []
+
+    js = r.json()
+    ret = []
+    if js['error']:
+        return ret
+
+    symbol_key = symbol
+    for k, _ in js['result'].items():
+        if k == 'last': continue
+        symbol_key = k
+
+    if symbol_key not in js['result']:
+        return ret
+
+    print(js)
+    for blob in js['result'][symbol_key]:
+        ret.append({'t': blob[0], 'o': float(blob[1]), 'h': float(blob[2]), 'l': float(blob[3]), 'c': float(blob[4]), 'v': float(blob[6])})
+    return ret
+
 def lambda_handler(event, context):
     path_parameters = event[_EVENT_KEY_PATH_PARAMETER]
 
@@ -134,6 +163,8 @@ def lambda_handler(event, context):
         items = _get_binance_minutely_ohlcv(symbol, from_epoch_seconds)
     elif market == 'okcoin':
         items = _get_okcoin_minutely_ohlcv(symbol, from_epoch_seconds)
+    elif market == 'kraken':
+        items = _get_kraken_minutely_ohlcv(symbol, from_epoch_seconds)
 
     result = items
     return {
