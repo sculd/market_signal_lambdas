@@ -51,5 +51,5 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps(start_task('market_stream_publisher_binance', 'market_stream_publisher_binance', 'market_stream_publisher_binance:1', ['python', 'run.py', 'binance']))
+        'body': json.dumps(start_task('market_stream_publisher_binance', 'market_stream_publisher_binance', 'market_stream_publisher_binance:2', ['python', 'run.py', 'binance']))
     }

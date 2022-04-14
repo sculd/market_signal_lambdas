@@ -51,5 +51,5 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps(start_task('market_stream_publisher_kraken', 'market_stream_publisher_kraken', 'market_stream_publisher_kraken:1', ['python', 'run.py', 'kraken']))
+        'body': json.dumps(start_task('market_stream_publisher_kraken', 'market_stream_publisher_kraken', 'market_stream_publisher_kraken:2', ['python', 'run.py', 'kraken']))
     }
